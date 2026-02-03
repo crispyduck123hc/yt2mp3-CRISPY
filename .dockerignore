@@ -1,0 +1,9 @@
+# .dockerignore
+.git/
+.idea
+.venv
+__pycache__
+.DS_Store
+yt-downloads
+.gitignore
+.dockerignore
