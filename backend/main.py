@@ -11,7 +11,7 @@ def read_root():
     return {"message": "YouTube to MP3 Backend is Running!"}
 
 # Ensure a downloads folder exists
-DOWNLOAD_DIR = "yt-downloads"
+DOWNLOAD_DIR = "../yt-downloads"
 if not os.path.exists(DOWNLOAD_DIR):
     os.makedirs(DOWNLOAD_DIR)
 
