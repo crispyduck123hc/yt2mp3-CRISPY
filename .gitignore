@@ -1,6 +1,7 @@
 .venv
 .DS_Store
 __pycache__/
-yt-downloads/
+yt-downloads/*
+!yt-downloads/placeholder.txt
 .git/
 .idea

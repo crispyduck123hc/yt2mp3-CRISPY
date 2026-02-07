@@ -1,0 +1,25 @@
+services:
+  api:
+    # 1. Look for the Dockerfile in the current directory
+    build: .
+
+    # 2. Give the container a friendly name
+    container_name: youtube-downloader
+
+    # 3. Port mapping (Host:Container)
+    # This replaces the -p 8000:8000 flag
+    ports:
+      - "8000:8000"
+
+    # 4. Volume mounting (Host:Container)
+    volumes:
+      - .:/app # mount for live code changes
+      - ./yt-downloads:/app/yt-downloads # mount for downloads
+    # 5. Restart policy (Optional but recommended)
+    # Ensures the app starts back up if your Mac reboots
+    restart: always
+
+    # 6. Environment Variables (Optional)
+    # Great for things like API keys or debug modes
+    environment:
+      - PYTHONUNBUFFERED=1
