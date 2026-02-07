@@ -12,7 +12,7 @@ services:
     # Volume mounting (Host:Container)
     volumes:
       - .:/app # mount for live code changes
-      - ./yt-downloads:/app/yt-downloads # mount for downloads
+      - download_data:/app/yt-downloads # A Docker-managed volume
     # Restart policy (Optional but recommended)
     # Ensures the app starts back up if your Mac reboots
     restart: always
@@ -20,9 +20,13 @@ services:
     # Great for things like API keys or debug modes
     environment:
       - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app/backend
     #Tell the service to use the custom network defined below
     networks:
       - yt2mp3network
 networks:
   yt2mp3network:
     name: yt2mp3-net
+
+volumes:
+  download_data:
