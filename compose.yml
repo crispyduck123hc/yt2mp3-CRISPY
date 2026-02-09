@@ -1,3 +1,5 @@
+name: yt2mp3-project
+
 services:
   api:
     # Look for the Dockerfile in the current directory
