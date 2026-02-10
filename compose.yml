@@ -5,25 +5,17 @@ services:
     # Look for the Dockerfile in the current directory
     build: .
     image: yt2mp3-crispy:latest
-    # Give the container a custom name
     container_name: youtube-downloader
     # Port mapping (Host:Container)
-    # This replaces the -p 8000:8000 flag
     ports:
       - "8000:8000"
-    # Volume mounting (Host:Container)
     volumes:
       - .:/app # mount for live code changes
       - download_data:/app/yt-downloads # A Docker-managed volume
-    # Restart policy (Optional but recommended)
-    # Ensures the app starts back up if your Mac reboots
-    restart: always
-    # Environment Variables (Optional)
-    # Great for things like API keys or debug modes
+    # Environment Variables
+    # Set path for uvicorn module searching
     environment:
-      - PYTHONUNBUFFERED=1
       - PYTHONPATH=/app/backend
-    #Tell the service to use the custom network defined below
     networks:
       - yt2mp3network
 networks:
