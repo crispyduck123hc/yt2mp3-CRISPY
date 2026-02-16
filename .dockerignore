@@ -3,6 +3,12 @@
 .idea
 .venv
 __pycache__
+**/node_modules/
+**/dist/
+**/build/
+.vscode/
+.idea/
+*.md
 .DS_Store
 yt-downloads
 .gitignore
