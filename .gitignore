@@ -5,3 +5,8 @@ yt-downloads/*
 !yt-downloads/placeholder.txt
 .git/
 .idea
+node_modules/
+dist/
+dist-ssr/
+*.local
+.eslintcache
