@@ -13,3 +13,5 @@ __pycache__
 yt-downloads
 .gitignore
 .dockerignore
+.vite
+tmp
