@@ -8,13 +8,8 @@ from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
-app.include_router(api_router)
 
-@app.get("/")
-def read_root():
-    return {"message": "YouTube to MP3 Backend is Running possibly!"}
-
-@app.post("/download")
+@api_router.post("/download")
 async def start_download(
         request: DownloadRequest,
         background_tasks: BackgroundTasks,
@@ -32,6 +27,9 @@ async def start_download(
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Download failed: {str(e)}")
+
+# Include router into app after routes are defined
+app.include_router(api_router)
 
 # Get the directory of main.py: (backend)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
