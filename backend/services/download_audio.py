@@ -8,10 +8,14 @@ class DownloadAudio:
         if not os.path.exists(self.download_dir):
             os.makedirs(self.download_dir)
 
-    def download_audio(self, url: str) -> tuple[str, str]:
+    def get_title(self, url) -> str:
         with yt_dlp.YoutubeDL() as ydl:
             info = ydl.extract_info(url, download=False)
             video_title = info.get('title', 'audio_download')
+        return video_title
+
+    def download_audio(self, url: str) -> str:
+        # returns path to mp3
         unique_filename = str(uuid.uuid4())
         filepath = f"{self.download_dir}/{unique_filename}.mp3"
         ydl_opts = {
@@ -25,7 +29,7 @@ class DownloadAudio:
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
-        return filepath, video_title
+        return filepath
 
 _download_service = DownloadAudio()
 

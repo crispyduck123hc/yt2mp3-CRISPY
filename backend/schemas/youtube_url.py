@@ -1,4 +1,5 @@
 from pydantic import BaseModel, HttpUrl
 # DTO
-class DownloadRequest(BaseModel):
+# extra url parsing
+class DownloadUrl(BaseModel):
     url: HttpUrl

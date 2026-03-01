@@ -1,6 +1,6 @@
 import os
 
-from schemas.youtube_url import DownloadRequest
+from schemas.youtube_url import DownloadUrl
 from services.download_audio import get_download_audio, DownloadAudio, cleanup_temp_file
 from fastapi import FastAPI, BackgroundTasks, Depends, HTTPException, APIRouter
 from fastapi.responses import FileResponse
@@ -8,30 +8,36 @@ from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
-app.include_router(api_router)
 
-@app.get("/")
-def read_root():
-    return {"message": "YouTube to MP3 Backend is Running possibly!"}
+@api_router.post("/title")
+async def get_title(
+        request: DownloadUrl,
+        download_youtube_audio: DownloadAudio = Depends(get_download_audio)
+):
+    url_str = str(request.url)
+    return download_youtube_audio.get_title(url_str)
 
-@app.post("/download")
+@api_router.post("/download")
 async def start_download(
-        request: DownloadRequest,
+        request: DownloadUrl,
         background_tasks: BackgroundTasks,
         download_youtube_audio: DownloadAudio = Depends(get_download_audio)
 ):
     url_str = str(request.url)
     try:
-        filepath, title = download_youtube_audio.download_audio(url_str)
+        filepath = download_youtube_audio.download_audio(url_str)
         response = FileResponse(
             path=filepath,
             media_type="audio/mpeg",
-            filename=f"{title}.mp3"
+            filename=f"audio.mp3"
         )
         background_tasks.add_task(cleanup_temp_file, filepath)
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Download failed: {str(e)}")
+
+# Include router into app after routes are defined
+app.include_router(api_router)
 
 # Get the directory of main.py: (backend)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -45,6 +51,7 @@ if os.path.exists(os.path.join(FRONTEND_DIST, "assets")):
     app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIST, "assets")), name="assets")
 
 # THE CATCH-ALL for frontend service
+# TODO: does this need to be async if its just serving html?
 @app.get("/{catchall:path}")
 async def serve_frontend():
     index_path = os.path.join(FRONTEND_DIST, "index.html")
