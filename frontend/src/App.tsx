@@ -14,19 +14,26 @@ function App() {
 
     try {
       // Because of your Vite Proxy, we call /api/download
-      const response = await fetch('/api/download', {
+      const title_response = await fetch('/api/title', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: url })
+      });
+        const title = await title_response.json()
+
+      const file_response = await fetch('/api/download', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: url }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (!file_response.ok) {
+        const errorData = await file_response.json();
         throw new Error(errorData.detail || 'Download failed');
       }
 
       // Handle the binary data (the MP3 file)
-      const blob = await response.blob();
+      const blob = await file_response.blob();
 
       // Create a temporary reference to blob
       const downloadUrl = window.URL.createObjectURL(blob);
@@ -34,7 +41,7 @@ function App() {
       link.href = downloadUrl;
       // Add download attribute to anchor
       // Try to get filename from header or fallback
-      link.setAttribute('download', 'audio.mp3');
+      link.setAttribute('download', `${title}.mp3`);
       // automatic download of file
       document.body.appendChild(link);
       link.click();
