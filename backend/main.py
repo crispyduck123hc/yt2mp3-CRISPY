@@ -10,7 +10,7 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 @api_router.post("/title")
-async def get_title(
+def get_title(
         request: DownloadUrl,
         download_youtube_audio: DownloadAudio = Depends(get_download_audio)
 ):
@@ -18,7 +18,7 @@ async def get_title(
     return download_youtube_audio.get_title(url_str)
 
 @api_router.post("/download")
-async def start_download(
+def start_download(
         request: DownloadUrl,
         background_tasks: BackgroundTasks,
         download_youtube_audio: DownloadAudio = Depends(get_download_audio)
@@ -51,8 +51,7 @@ if os.path.exists(os.path.join(FRONTEND_DIST, "assets")):
     app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIST, "assets")), name="assets")
 
 # THE CATCH-ALL for frontend service
-# TODO: does this need to be async if its just serving html?
-@app.get("/{catchall:path}")
+@app.get("{catchall:path}")
 async def serve_frontend():
     index_path = os.path.join(FRONTEND_DIST, "index.html")
 
